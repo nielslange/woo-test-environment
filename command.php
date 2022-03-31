@@ -221,7 +221,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 */
 	private function setupSidebar() {
 		WP_CLI::runcommand( 'widget reset --all' );
-		WP_CLI::runcommand( 'widget add block sidebar-1 --content=\'<!-- wp:latest-posts {"postsToShow":20} /-->\'' );
+		WP_CLI::runcommand( 'widget add block sidebar-1 --content=\'<!-- wp:latest-posts {"postsToShow":20,"order":"asc","orderBy":"title\"} /-->\'' );
 	}
 
 	/**
