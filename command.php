@@ -49,8 +49,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 
 		$this->setupPlugins( $assoc_args );
 		$this->setupThemes( $assoc_args );
-		$this->setupProducts();
 		$this->emptySite();
+		$this->setupProducts();
 		$this->setupPages();
 		$this->setupPosts();
 		$this->setupSidebar();
