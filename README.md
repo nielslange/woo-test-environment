@@ -16,8 +16,12 @@ wp package install git@github.com:nielslange/woo-test-environment.git
 
 ## Usage
 
-- `wp woo-test-environment setup`
-- `wp woo-test-environment teardown`
+```sh
+wp woo-test-environment setup
+```
+```sh
+wp woo-test-environment teardown
+```
 
 ### Parameter
 
