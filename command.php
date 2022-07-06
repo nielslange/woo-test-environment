@@ -21,10 +21,10 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--version=<version>]
-	 * : The desired WooCommerce Blocks release to install.
+	 * [--blocks[=<version>]]
+	 * : The desired WooCommerce Blocks version to install. When selecting 'true', the most recent version gets installed.
 	 *
-	 * [--gutenberg=<true>]
+	 * [--gutenberg]
 	 * : Whether to install and activate the Gutenberg plugin.
 	 *
 	 * [--theme=<theme>]
@@ -33,10 +33,12 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp woo-test-environment setup --version=7.3.0
+	 *     wp woo-test-environment setup --blocks=true --gutenberg=true --theme=storefront
 	 *
 	 * @param array $args An array with optional arguments.
 	 * @param array $assoc_args An array with optional arguments.
+	 *
+	 * @return void
 	 */
 	public function setup( array $args, array $assoc_args ) {
 		// Bail early when running command within a multisite.
@@ -80,19 +82,23 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPlugins( $assoc_args ) {
-		// Install and activate a certain WooCommerce Blocks release, if desired.
-		if ( isset( $assoc_args['version'] ) && preg_match( '/\d.\d.\d/', $assoc_args['version'] ) ) {
-			try {
-				$plugin = "https://github.com/woocommerce/woocommerce-gutenberg-products-block/releases/download/v{$assoc_args['version']}/woo-gutenberg-products-block.zip";
-				WP_CLI::runcommand( "plugin install {$plugin} --activate" );
-			} catch ( \Throwable $th ) {
-				WP_CLI::error( "WooCommerce Blocks release {$assoc_args['version']} could not be installed!" );
-				WP_CLI::error( $th );
+		// Install and activate the latest or a certain WooCommerce Blocks release.
+		if ( isset( $assoc_args['blocks'] ) ) {
+			if ( preg_match( '/\d.\d.\d/', $assoc_args['blocks'] ) ) {
+				try {
+					$plugin = "https://github.com/woocommerce/woocommerce-gutenberg-products-block/releases/download/v{$assoc_args['blocks']}/woo-gutenberg-products-block.zip";
+					WP_CLI::runcommand( "plugin install {$plugin} --activate" );
+				} catch ( \Throwable $th ) {
+					WP_CLI::error( "WooCommerce Blocks release {$assoc_args['block']} could not be installed!" );
+					WP_CLI::error( $th );
+				}
+			} else {
+				WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
 			}
 		}
 
 		// Install and activate the Gutenberg plugin, if desired.
-		if ( isset( $assoc_args['gutenberg'] ) && true === $assoc_args['gutenberg'] ) {
+		if ( isset( $assoc_args['gutenberg'] ) ) {
 			WP_CLI::runcommand( 'plugin install gutenberg --activate' );
 		}
 
@@ -129,7 +135,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPages() {
-		// Create Shop page with block.
+		 // Create Shop page with block.
 		WP_CLI::runcommand( 'post create --menu_order=0 --post_type=page --post_status=publish --post_title=\'Shop\' --post_content=\'<!-- wp:woocommerce/all-products {"columns":3,"rows":3,"alignButtons":false,"contentVisibility":{"orderBy":true},"orderby":"date","layoutConfig":[["woocommerce/product-image",{"imageSizing":"cropped"}],["woocommerce/product-title"],["woocommerce/product-price"],["woocommerce/product-rating"],["woocommerce/product-button"]]} --><div class="wp-block-woocommerce-all-products wc-block-all-products" data-attributes="{&quot;alignButtons&quot;:false,&quot;columns&quot;:3,&quot;contentVisibility&quot;:{&quot;orderBy&quot;:true},&quot;isPreview&quot;:false,&quot;layoutConfig&quot;:[[&quot;woocommerce/product-image&quot;,{&quot;imageSizing&quot;:&quot;cropped&quot;}],[&quot;woocommerce/product-title&quot;],[&quot;woocommerce/product-price&quot;],[&quot;woocommerce/product-rating&quot;],[&quot;woocommerce/product-button&quot;]],&quot;orderby&quot;:&quot;date&quot;,&quot;rows&quot;:3}"></div><!-- /wp:woocommerce/all-products -->\'' );
 
 		// Create (default) Shop page.
@@ -171,7 +177,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPosts() {
-		// Create All Reviews post.
+		 // Create All Reviews post.
 		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'All Reviews\' --post_content=\'<!-- wp:woocommerce/all-reviews --><div class="wp-block-woocommerce-all-reviews wc-block-all-reviews has-image has-name has-date has-rating has-content has-product-name" data-image-type="reviewer" data-orderby="most-recent" data-reviews-on-page-load="10" data-reviews-on-load-more="10" data-show-load-more="true" data-show-orderby="true"></div><!-- /wp:woocommerce/all-reviews -->\'' );
 
 		// Create Active Product Filters post.
@@ -340,7 +346,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			)
 		);
 
-		return $result->return_code === 0;
+		return 0 === $result->return_code;
 	}
 }
 
