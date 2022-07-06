@@ -346,7 +346,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			)
 		);
 
-		return $result->return_code === 0;
+		return 0 === $result->return_code;
 	}
 }
 
