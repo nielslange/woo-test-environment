@@ -21,10 +21,10 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--blocks=<true||version>]
+	 * [--blocks[=<version>]]
 	 * : The desired WooCommerce Blocks version to install. When selecting 'true', the most recent version gets installed.
 	 *
-	 * [--gutenberg=<true>]
+	 * [--gutenberg]
 	 * : Whether to install and activate the Gutenberg plugin.
 	 *
 	 * [--theme=<theme>]
@@ -84,9 +84,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	private function setupPlugins( $assoc_args ) {
 		// Install and activate the latest or a certain WooCommerce Blocks release.
 		if ( isset( $assoc_args['blocks'] ) ) {
-			if ( 'true' === $assoc_args['blocks'] ) {
-				WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
-			} elseif ( preg_match( '/\d.\d.\d/', $assoc_args['blocks'] ) ) {
+			if ( preg_match( '/\d.\d.\d/', $assoc_args['blocks'] ) ) {
 				try {
 					$plugin = "https://github.com/woocommerce/woocommerce-gutenberg-products-block/releases/download/v{$assoc_args['blocks']}/woo-gutenberg-products-block.zip";
 					WP_CLI::runcommand( "plugin install {$plugin} --activate" );
@@ -94,11 +92,13 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 					WP_CLI::error( "WooCommerce Blocks release {$assoc_args['block']} could not be installed!" );
 					WP_CLI::error( $th );
 				}
+			} else {
+				WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
 			}
 		}
 
 		// Install and activate the Gutenberg plugin, if desired.
-		if ( isset( $assoc_args['gutenberg'] ) && 'true' === $assoc_args['gutenberg'] ) {
+		if ( isset( $assoc_args['gutenberg'] ) ) {
 			WP_CLI::runcommand( 'plugin install gutenberg --activate' );
 		}
 
