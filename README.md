@@ -49,6 +49,7 @@ Contributions are always welcome! Feel free to create a new [issue](https://gith
 ## 1.1.0 - July 6, 2022
 
 - [Command fails at sidebar](https://github.com/nielslange/woo-test-environment/issues/2) (props @albarin)
+- [Cart/Checkout inserted even if WooCommerce Blocks isn't installed](https://github.com/nielslange/woo-test-environment/issues/3) (props @albarin)
 
 ### 1.0.0 - March 31, 2022
 
