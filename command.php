@@ -21,7 +21,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--blocks=<true || version>]
+	 * [--blocks=<true||version>]
 	 * : The desired WooCommerce Blocks version to install. When selecting 'true', the most recent version gets installed.
 	 *
 	 * [--gutenberg=<true>]
