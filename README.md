@@ -28,8 +28,8 @@ wp woo-test-environment teardown
 
 The command `wp woo-test-environment setup` can accept the following optional parameter:
 
-- `--blocks=<true || version>` This parameter installs a certain WooCommerce Blocks version.
-- `--gutenberg=<true>` This parameter installs and activates the latest version of the Gutenberg plugin.
+- `--blocks` This parameter installs a certain WooCommerce Blocks version.
+- `--gutenberg[=<true>]` This parameter installs and activates the latest version of the Gutenberg plugin.
 - `--theme=<theme>` This parameter installs and activates the latest version of a certain theme.
 
 ### Examples
@@ -43,13 +43,13 @@ wp woo-test-environment setup
 Installing WooCommerce and WooCommerce Blocks
 
 ```sh
-wp woo-test-environment setup --blocks=true
+wp woo-test-environment setup --blocks
 ```
 
 Installing WooCommerce, WooCommerce Blocks and Gutenberg
 
 ```sh
-wp woo-test-environment setup --blocks=true --gutenberg=true
+wp woo-test-environment setup --blocks --gutenberg
 ```
 
 Installing WooCommerce and WooCommerce Blocks 7.3.0
@@ -67,7 +67,7 @@ wp woo-test-environment setup --theme=storefront
 Installing WooCommerce, WooCommerce Blocks, Gutenberg and Storefront
 
 ```sh
-wp woo-test-environment setup --blocks=true --gutenberg=true --theme=storefront
+wp woo-test-environment setup --blocks --gutenberg --theme=storefront
 ```
 
 ## Contributing
