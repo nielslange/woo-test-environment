@@ -19,10 +19,6 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	/**
 	 * Set up WooCommerce Blocks Testing Environment.
 	 *
-	 * @param array $args An array with optional arguments.
-	 * @param array $assoc_args An array with optional arguments.
-	 * @return string Success or error message.
-	 *
 	 * ## OPTIONS
 	 *
 	 * [--version=<version>]
@@ -38,8 +34,11 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * ## EXAMPLES
 	 *
 	 *     wp woo-test-environment setup --version=7.3.0
+	 *
+	 * @param array $args An array with optional arguments.
+	 * @param array $assoc_args An array with optional arguments.
 	 */
-	public function setup( $args, $assoc_args ) {
+	public function setup( array $args, array $assoc_args ) {
 		// Bail early when running command within a multisite.
 		if ( is_multisite() ) {
 			WP_CLI::error( 'Multisite is not supported!' );
@@ -77,6 +76,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * Set up plugins.
 	 *
 	 * @param array $assoc_args An array with optional arguments.
+	 *
 	 * @return void
 	 */
 	private function setupPlugins( $assoc_args ) {
@@ -104,6 +104,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * Set up themes.
 	 *
 	 * @param array $assoc_args An array with optional arguments.
+	 *
 	 * @return void
 	 */
 	private function setupThemes( $assoc_args ) {
