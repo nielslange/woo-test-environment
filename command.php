@@ -22,7 +22,9 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * ## OPTIONS
 	 *
 	 * [--blocks[=<version>]]
-	 * : The desired WooCommerce Blocks version to install. When selecting 'true', the most recent version gets installed.
+	 * : The desired WooCommerce Blocks version to install.
+	 * Specify a version number to install a specific release. Leave empty to install the latest version.
+	 * Specify a link to the zip version to install from a remote source.
 	 *
 	 * [--gutenberg]
 	 * : Whether to install and activate the Gutenberg plugin.
@@ -83,19 +85,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 */
 	private function setupPlugins( $assoc_args ) {
 		// Install and activate the latest or a certain WooCommerce Blocks release.
-		if ( isset( $assoc_args['blocks'] ) ) {
-			if ( preg_match( '/\d.\d.\d/', $assoc_args['blocks'] ) ) {
-				try {
-					$plugin = "https://github.com/woocommerce/woocommerce-gutenberg-products-block/releases/download/v{$assoc_args['blocks']}/woo-gutenberg-products-block.zip";
-					WP_CLI::runcommand( "plugin install {$plugin} --activate" );
-				} catch ( \Throwable $th ) {
-					WP_CLI::error( "WooCommerce Blocks release {$assoc_args['block']} could not be installed!" );
-					WP_CLI::error( $th );
-				}
-			} else {
-				WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
-			}
-		}
+		$this->installWoocommerceBlocksPlugin( $assoc_args );
 
 		// Install and activate the Gutenberg plugin, if desired.
 		if ( isset( $assoc_args['gutenberg'] ) ) {
@@ -135,14 +125,14 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPages() {
-		 // Create Shop page with block.
+		// Create Shop page with block.
 		WP_CLI::runcommand( 'post create --menu_order=0 --post_type=page --post_status=publish --post_title=\'Shop\' --post_content=\'<!-- wp:woocommerce/all-products {"columns":3,"rows":3,"alignButtons":false,"contentVisibility":{"orderBy":true},"orderby":"date","layoutConfig":[["woocommerce/product-image",{"imageSizing":"cropped"}],["woocommerce/product-title"],["woocommerce/product-price"],["woocommerce/product-rating"],["woocommerce/product-button"]]} --><div class="wp-block-woocommerce-all-products wc-block-all-products" data-attributes="{&quot;alignButtons&quot;:false,&quot;columns&quot;:3,&quot;contentVisibility&quot;:{&quot;orderBy&quot;:true},&quot;isPreview&quot;:false,&quot;layoutConfig&quot;:[[&quot;woocommerce/product-image&quot;,{&quot;imageSizing&quot;:&quot;cropped&quot;}],[&quot;woocommerce/product-title&quot;],[&quot;woocommerce/product-price&quot;],[&quot;woocommerce/product-rating&quot;],[&quot;woocommerce/product-button&quot;]],&quot;orderby&quot;:&quot;date&quot;,&quot;rows&quot;:3}"></div><!-- /wp:woocommerce/all-products -->\'' );
 
 		// Create (default) Shop page.
 		WP_CLI::runcommand( 'post create --post_type=page --post_status=publish --post_title=\'Classic Shop\' --post_parent=$(wp post list --title="Shop" --post_type=page --field=ID)' );
 		WP_CLI::runcommand( 'option update woocommerce_shop_page_id $(wp post list --title="Classic Shop" --post_type=page --field=ID)' );
 
-		if ( $this->is_woocommerce_blocks_active() ) {
+		if ( $this->isWoocommerceBlocksActive() ) {
 			// Create Cart page with block.
 			WP_CLI::runcommand( 'post create --menu_order=1 --post_type=page --post_status=publish --post_title=\'Cart\' --post_content=\'<!-- wp:woocommerce/cart --><div class="wp-block-woocommerce-cart is-loading"><!-- wp:woocommerce/filled-cart-block --><div class="wp-block-woocommerce-filled-cart-block"><!-- wp:woocommerce/cart-items-block --><div class="wp-block-woocommerce-cart-items-block"><!-- wp:woocommerce/cart-line-items-block --><div class="wp-block-woocommerce-cart-line-items-block"></div><!-- /wp:woocommerce/cart-line-items-block --></div><!-- /wp:woocommerce/cart-items-block --><!-- wp:woocommerce/cart-totals-block --><div class="wp-block-woocommerce-cart-totals-block"><!-- wp:woocommerce/cart-order-summary-block --><div class="wp-block-woocommerce-cart-order-summary-block"></div><!-- /wp:woocommerce/cart-order-summary-block --><!-- wp:woocommerce/cart-express-payment-block --><div class="wp-block-woocommerce-cart-express-payment-block"></div><!-- /wp:woocommerce/cart-express-payment-block --><!-- wp:woocommerce/proceed-to-checkout-block --><div class="wp-block-woocommerce-proceed-to-checkout-block"></div><!-- /wp:woocommerce/proceed-to-checkout-block --><!-- wp:woocommerce/cart-accepted-payment-methods-block --><div class="wp-block-woocommerce-cart-accepted-payment-methods-block"></div><!-- /wp:woocommerce/cart-accepted-payment-methods-block --></div><!-- /wp:woocommerce/cart-totals-block --></div><!-- /wp:woocommerce/filled-cart-block --><!-- wp:woocommerce/empty-cart-block --><div class="wp-block-woocommerce-empty-cart-block"><!-- wp:image {"align":"center","sizeSlug":"small"} --><div class="wp-block-image"><figure class="aligncenter size-small"><img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzgiIGhlaWdodD0iMzgiIHZpZXdCb3g9IjAgMCAzOCAzOCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTE5IDBDOC41MDQwMyAwIDAgOC41MDQwMyAwIDE5QzAgMjkuNDk2IDguNTA0MDMgMzggMTkgMzhDMjkuNDk2IDM4IDM4IDI5LjQ5NiAzOCAxOUMzOCA4LjUwNDAzIDI5LjQ5NiAwIDE5IDBaTTI1LjEyOSAxMi44NzFDMjYuNDg1MSAxMi44NzEgMjcuNTgwNiAxMy45NjY1IDI3LjU4MDYgMTUuMzIyNkMyNy41ODA2IDE2LjY3ODYgMjYuNDg1MSAxNy43NzQyIDI1LjEyOSAxNy43NzQyQzIzLjc3MyAxNy43NzQyIDIyLjY3NzQgMTYuNjc4NiAyMi42Nzc0IDE1LjMyMjZDMjIuNjc3NCAxMy45NjY1IDIzLjc3MyAxMi44NzEgMjUuMTI5IDEyLjg3MVpNMTEuNjQ1MiAzMS4yNTgxQzkuNjE0OTIgMzEuMjU4MSA3Ljk2Nzc0IDI5LjY0OTIgNy45Njc3NCAyNy42NTczQzcuOTY3NzQgMjYuMTI1IDEwLjE1MTIgMjMuMDI5OCAxMS4xNTQ4IDIxLjY5NjhDMTEuNCAyMS4zNjczIDExLjg5MDMgMjEuMzY3MyAxMi4xMzU1IDIxLjY5NjhDMTMuMTM5MSAyMy4wMjk4IDE1LjMyMjYgMjYuMTI1IDE1LjMyMjYgMjcuNjU3M0MxNS4zMjI2IDI5LjY0OTIgMTMuNjc1NCAzMS4yNTgxIDExLjY0NTIgMzEuMjU4MVpNMTIuODcxIDE3Ljc3NDJDMTEuNTE0OSAxNy43NzQyIDEwLjQxOTQgMTYuNjc4NiAxMC40MTk0IDE1LjMyMjZDMTAuNDE5NCAxMy45NjY1IDExLjUxNDkgMTIuODcxIDEyLjg3MSAxMi44NzFDMTQuMjI3IDEyLjg3MSAxNS4zMjI2IDEzLjk2NjUgMTUuMzIyNiAxNS4zMjI2QzE1LjMyMjYgMTYuNjc4NiAxNC4yMjcgMTcuNzc0MiAxMi44NzEgMTcuNzc0MlpNMjUuOTEwNSAyOS41ODc5QzI0LjE5NDQgMjcuNTM0NyAyMS42NzM4IDI2LjM1NDggMTkgMjYuMzU0OEMxNy4zNzU4IDI2LjM1NDggMTcuMzc1OCAyMy45MDMyIDE5IDIzLjkwMzJDMjIuNDAxNiAyMy45MDMyIDI1LjYxMTcgMjUuNDA0OCAyNy43ODc1IDI4LjAyNUMyOC44NDQ4IDI5LjI4MTUgMjYuOTI5NCAzMC44MjE0IDI1LjkxMDUgMjkuNTg3OVoiIGZpbGw9ImJsYWNrIi8+Cjwvc3ZnPgo=" alt=""/></figure></div><!-- /wp:image --><!-- wp:heading {"textAlign":"center","className":"wc-block-cart__empty-cart__title"} --><h2 class="has-text-align-center wc-block-cart__empty-cart__title">Your cart is currently empty!</h2><!-- /wp:heading --><!-- wp:paragraph {"align":"center"} --><p class="has-text-align-center"><a href="http://localhost:8889/shop/">Browse store</a>.</p><!-- /wp:paragraph --><!-- wp:separator {"className":"is-style-dots"} --><hr class="wp-block-separator is-style-dots"/><!-- /wp:separator --><!-- wp:heading {"textAlign":"center"} --><h2 class="has-text-align-center">New in store</h2><!-- /wp:heading --><!-- wp:woocommerce/product-new {"rows":1} /--></div><!-- /wp:woocommerce/empty-cart-block --></div><!-- /wp:woocommerce/cart -->\'' );
 			WP_CLI::runcommand( 'option update woocommerce_cart_page_id $(wp post list --title="Cart" --post_type=page --field=ID)' );
@@ -177,7 +167,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPosts() {
-		 // Create All Reviews post.
+		// Create All Reviews post.
 		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'All Reviews\' --post_content=\'<!-- wp:woocommerce/all-reviews --><div class="wp-block-woocommerce-all-reviews wc-block-all-reviews has-image has-name has-date has-rating has-content has-product-name" data-image-type="reviewer" data-orderby="most-recent" data-reviews-on-page-load="10" data-reviews-on-load-more="10" data-show-load-more="true" data-show-orderby="true"></div><!-- /wp:woocommerce/all-reviews -->\'' );
 
 		// Create Active Product Filters post.
@@ -337,7 +327,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * @return bool
 	 */
-	public function is_woocommerce_blocks_active(): bool {
+	private function isWoocommerceBlocksActive(): bool {
 		$result = WP_CLI::runcommand(
 			'plugin is-active woo-gutenberg-products-block',
 			array(
@@ -347,6 +337,64 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		);
 
 		return 0 === $result->return_code;
+	}
+
+	/**
+	 * Installs WooCommerce Blocks plugin.
+	 *
+	 * @param array $assoc_args An array with optional arguments.
+	 *
+	 * @return void
+	 */
+	private function installWoocommerceBlocksPlugin( array $assoc_args ) {
+		if ( ! isset( $assoc_args['blocks'] ) ) {
+			return;
+		}
+
+		if ( true === $assoc_args['blocks'] ) {
+			WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
+			return;
+		}
+
+		$url = '';
+		if ( $this->isReleaseVersion( $assoc_args['blocks'] ) ) {
+			$url = "https://github.com/woocommerce/woocommerce-gutenberg-products-block/releases/download/v{$assoc_args['blocks']}/woo-gutenberg-products-block.zip";
+		} elseif ( $this->isUrl( $assoc_args['blocks'] ) ) {
+			$url = $assoc_args['blocks'];
+		}
+
+		if ( ! $url ) {
+			return;
+		}
+
+		try {
+			WP_CLI::runcommand( "plugin install {$url} --activate" );
+		} catch ( \Throwable $th ) {
+			WP_CLI::error( "WooCommerce Blocks release {$assoc_args['block']} could not be installed!" );
+			WP_CLI::error( $th );
+		}
+	}
+
+	/**
+	 * Checks if the given string is a release version.
+	 *
+	 * @param string $version The version to check.
+	 *
+	 * @return false|int
+	 */
+	public function isReleaseVersion( $version ) {
+		return preg_match( '/^\d.\d.\d$/', $version );
+	}
+
+	/**
+	 * Checks if the given string is a URL.
+	 *
+	 * @param string $url The URL to check.
+	 *
+	 * @return bool
+	 */
+	public function isUrl( $url ): bool {
+		return filter_var( $url, FILTER_VALIDATE_URL );
 	}
 }
 
