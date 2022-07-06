@@ -19,6 +19,7 @@ wp package install git@github.com:nielslange/woo-test-environment.git
 ```sh
 wp woo-test-environment setup
 ```
+
 ```sh
 wp woo-test-environment teardown
 ```
@@ -42,3 +43,13 @@ wp woo-test-environment setup --version=7.3.0 --gutenberg=true --theme=storefron
 ## Contributing
 
 Contributions are always welcome! Feel free to create a new [issue](https://github.com/nielslange/woo-test-environment/issues) or [pull request](https://github.com/nielslange/woo-test-environment/pulls).
+
+## Changelog
+
+## 1.1.0 - July 6, 2022
+
+- [Command fails at sidebar](https://github.com/nielslange/woo-test-environment/issues/2) (props @albarin)
+
+### 1.0.0 - March 31, 2022
+
+- Initial commit
