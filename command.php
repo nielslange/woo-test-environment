@@ -265,6 +265,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		WP_CLI::runcommand( 'option set --format=json woocommerce_cod_settings \'{"enabled":"yes","title":"Cash on delivery","description":"Cash on delivery description","instructions":"Cash on delivery instructions"}\'' );
 		WP_CLI::runcommand( 'option set --format=json woocommerce_bacs_settings \'{"enabled":"yes","title":"Direct bank transfer","description":"Direct bank transfer description","instructions":"Direct bank transfer instructions"}\'' );
 		WP_CLI::runcommand( 'option set --format=json woocommerce_cheque_settings \'{"enabled":"yes","title":"Check payments","description":"Check payments description","instructions":"Check payments instructions"}\'' );
+
+		$this->setupStripeGateway();
 	}
 
 	/**
@@ -415,6 +417,58 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 */
 	public function isUrl( $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL );
+	}
+
+	/**
+	 * Sets up the WooCommerce Stripe gateway.
+	 */
+	public function setupStripeGateway() {
+		WP_CLI::runcommand( 'option delete woocommerce_stripe_settings' );
+
+		WP_CLI::log( 'Setting up Stripe testing account...' );
+		WP_CLI::runcommand( 'plugin install woocommerce-gateway-stripe --activate' );
+
+		$publishable_key = $this->getInput( 'Enter your test publishable key: ' );
+		if ( empty( $publishable_key ) ) {
+			WP_CLI::warning( 'Empty publishable key, skipping Stripe configuration.' );
+			return;
+		}
+
+		$secret_key = $this->getHiddenInput( 'Enter your test secret key: ' );
+		if ( empty( $secret_key ) ) {
+			WP_CLI::warning( 'Empty secret key, skipping Stripe configuration.' );
+			return;
+		}
+
+		WP_CLI::log( "\n" );
+		WP_CLI::runcommand( 'option add --format=json woocommerce_stripe_settings \'{"enabled":"yes", "testmode":"yes", "test_publishable_key":"' . $publishable_key . '", "test_secret_key":"' . $secret_key . '"}\'' );
+	}
+
+	/**
+	 * Gets user input from command line.
+	 *
+	 * @param string $prompt Prompt to display.
+	 *
+	 * @return string
+	 */
+	private function getInput( $prompt ) {
+		WP_CLI::log( $prompt );
+
+		return trim( fgets( STDIN ) );
+	}
+
+	/**
+	 * Gets user hidden input from command line.
+	 *
+	 * @param string $prompt Prompt to display.
+	 *
+	 * @return string */
+	private function getHiddenInput( $prompt ) {
+		system( 'stty -echo' );
+		$response = $this->getInput( $prompt );
+		system( 'stty echo' );
+
+		return $response;
 	}
 }
 
