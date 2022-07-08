@@ -70,10 +70,16 @@ Installing WooCommerce and Storefront
 wp woo-test-environment setup --theme=storefront
 ```
 
-Installing WooCommerce, WooCommerce Blocks, Gutenberg and Storefront
+Installing WooCommerce and Stripe
 
 ```sh
-wp woo-test-environment setup --blocks --gutenberg --theme=storefront
+wp woo-test-environment setup --stripe
+```
+
+Installing WooCommerce, WooCommerce Blocks, Gutenberg, Stripe and Storefront
+
+```sh
+wp woo-test-environment setup --blocks --gutenberg --stripe --theme=storefront
 ```
 
 ## Contributing

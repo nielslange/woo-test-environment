@@ -56,8 +56,11 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *    # Installing WooCommerce and Storefront
 	 *    $ wp woo-test-environment setup --theme=storefront
 	 *
-	 *    # Installing WooCommerce, WooCommerce Blocks, Gutenberg and Storefront
-	 *    $ wp woo-test-environment setup --blocks --gutenberg --theme=storefront
+	 *    # Installing WooCommerce and Stripe
+	 *    $ wp woo-test-environment setup --stripe
+	 *
+	 *    # Installing WooCommerce, WooCommerce Blocks, Gutenberg, Stripe and Storefront
+	 *    $ wp woo-test-environment setup --blocks --gutenberg --stripe --theme=storefront
 	 *
 	 * @param array $args An array with optional arguments.
 	 * @param array $assoc_args An array with optional arguments.
