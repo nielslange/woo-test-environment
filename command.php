@@ -32,7 +32,9 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * [--theme=<theme>]
 	 * : The desired WordPress theme to install and activate.
-	 * ---
+	 *
+	 * [--stripe]
+	 * : Whether to install, activate and configure the Stripe plugin.
 	 *
 	 * ## EXAMPLES
 	 *
@@ -78,7 +80,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		$this->setupPosts();
 		$this->setupSidebar();
 		$this->setupShipping();
-		$this->setupPayments();
+		$this->setupPayments( $assoc_args );
 		$this->setupTax();
 		$this->setupCoupons();
 		$this->setupReviews();
@@ -259,14 +261,18 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	/**
 	 * Set up payments.
 	 *
+	 * @param array $assoc_args An array with optional arguments.
+	 *
 	 * @return void
 	 */
-	private function setupPayments() {
+	private function setupPayments( $assoc_args ) {
 		WP_CLI::runcommand( 'option set --format=json woocommerce_cod_settings \'{"enabled":"yes","title":"Cash on delivery","description":"Cash on delivery description","instructions":"Cash on delivery instructions"}\'' );
 		WP_CLI::runcommand( 'option set --format=json woocommerce_bacs_settings \'{"enabled":"yes","title":"Direct bank transfer","description":"Direct bank transfer description","instructions":"Direct bank transfer instructions"}\'' );
 		WP_CLI::runcommand( 'option set --format=json woocommerce_cheque_settings \'{"enabled":"yes","title":"Check payments","description":"Check payments description","instructions":"Check payments instructions"}\'' );
 
-		$this->setupStripeGateway();
+		if ( isset( $assoc_args['stripe'] ) ) {
+			$this->setupStripeGateway();
+		}
 	}
 
 	/**
