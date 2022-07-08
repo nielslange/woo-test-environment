@@ -36,13 +36,26 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *    wp woo-test-environment setup --blocks
-	 *    wp woo-test-environment setup --blocks=7.9.0
-	 *    wp woo-test-environment setup --blocks=//github.com/woocommerce/woocommerce-blocks/releases/download/v7.8.2/woo-gutenberg-products-block.zip
-	 *
-	 *    wp woo-test-environment setup --gutenberg
-	 *
-	 *    wp woo-test-environment setup --theme=storefront
+* 		# Installing WooCommerce only
+   *    $ wp woo-test-environment setup
+   *
+   *    # Installing WooCommerce and WooCommerce Blocks
+   *    $ wp woo-test-environment setup --blocks
+   *
+   *    # Installing WooCommerce, WooCommerce Blocks and Gutenberg
+   *    $ wp woo-test-environment setup --blocks --gutenberg
+   *
+   *    # Installing WooCommerce and WooCommerce Blocks 7.3.0
+   *    $ wp woo-test-environment setup --blocks=7.3.0
+   * 
+   *    # Installing WooCommerce and WooCommerce Blocks via URL
+   *    $ wp woo-test-environment setup --blocks=//github.com/woocommerce/woocommerce-blocks/releases/download/v7.8.2/woo-gutenberg-products-block.zip
+   *
+   *    # Installing WooCommerce and Storefront
+   *    $ wp woo-test-environment setup --theme=storefront
+   *
+   *    # Installing WooCommerce, WooCommerce Blocks, Gutenberg and Storefront
+   *    $ wp woo-test-environment setup --blocks --gutenberg --theme=storefront
 	 *
 	 * @param array $args An array with optional arguments.
 	 * @param array $assoc_args An array with optional arguments.
