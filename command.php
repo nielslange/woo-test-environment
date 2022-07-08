@@ -23,8 +23,9 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * [--blocks[=<version|url>]]
 	 * : The desired WooCommerce Blocks version to install.
-	 * Specify a version number to install a specific release. Leave empty to install the latest version.
-	 * Specify a link to the zip version to install from a remote source.
+	 * --blocks: will install the latest version.
+	 * --blocks=<version>: will install the specified plugin version.
+	 * --blocks=<url>: will install the plugin from the specified URL.
 	 *
 	 * [--gutenberg]
 	 * : Whether to install and activate the Gutenberg plugin.
@@ -35,7 +36,13 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     wp woo-test-environment setup --blocks=true --gutenberg=true --theme=storefront
+	 *    wp woo-test-environment setup --blocks
+	 *    wp woo-test-environment setup --blocks=7.9.0
+	 *    wp woo-test-environment setup --blocks=//github.com/woocommerce/woocommerce-blocks/releases/download/v7.8.2/woo-gutenberg-products-block.zip
+	 *
+	 *    wp woo-test-environment setup --gutenberg
+	 *
+	 *    wp woo-test-environment setup --theme=storefront
 	 *
 	 * @param array $args An array with optional arguments.
 	 * @param array $assoc_args An array with optional arguments.
