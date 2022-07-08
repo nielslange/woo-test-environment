@@ -21,7 +21,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--blocks[=<version>]]
+	 * [--blocks[=<version|url>]]
 	 * : The desired WooCommerce Blocks version to install.
 	 * Specify a version number to install a specific release. Leave empty to install the latest version.
 	 * Specify a link to the zip version to install from a remote source.
