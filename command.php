@@ -422,7 +422,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	/**
 	 * Sets up the WooCommerce Stripe gateway.
 	 */
-	public function setupStripeGateway() {
+	private function setupStripeGateway() {
 		WP_CLI::runcommand( 'option delete woocommerce_stripe_settings' );
 
 		WP_CLI::log( 'Setting up Stripe testing account...' );
