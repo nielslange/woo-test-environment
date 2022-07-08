@@ -58,6 +58,12 @@ Installing WooCommerce and WooCommerce Blocks 7.3.0
 wp woo-test-environment setup --blocks=7.3.0
 ```
 
+Installing WooCommerce and WooCommerce Blocks via URL
+
+```sh
+wp woo-test-environment setup --blocks=https://github.com/woocommerce/woocommerce-blocks/releases/download/v7.8.2/woo-gutenberg-products-block.zip
+```
+
 Installing WooCommerce and Storefront
 
 ```sh
