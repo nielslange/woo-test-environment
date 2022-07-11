@@ -76,18 +76,18 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		WP_CLI::log( 'Set up WooCommerce Blocks Testing Environment ...' );
 
 		$this->setupPlugins( $assoc_args );
-		$this->setupThemes( $assoc_args );
-		$this->emptySite();
-		$this->setupProducts();
-		$this->setupPages();
-		$this->setupPosts();
-		$this->setupSidebar();
-		$this->setupShipping();
-		$this->setupPayments( $assoc_args );
-		$this->setupTax();
-		$this->setupCoupons();
-		$this->setupReviews();
-		$this->setupPermalinks();
+		// $this->setupThemes( $assoc_args );
+		// $this->emptySite();
+		// $this->setupProducts();
+		// $this->setupPages();
+		// $this->setupPosts();
+		// $this->setupSidebar();
+		// $this->setupShipping();
+		// $this->setupPayments( $assoc_args );
+		// $this->setupTax();
+		// $this->setupCoupons();
+		// $this->setupReviews();
+		// $this->setupPermalinks();
 
 		WP_CLI::success( 'WooCommerce Blocks Testing Environment successfully set up.' );
 	}
@@ -396,6 +396,33 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 
 		if ( ! $url ) {
 			return;
+		}
+
+		if ( false !== strpos( $url, 'artifacts' ) ) {
+			$auth_token = $this->getInput( 'Enter your GitHub auth token: ' );
+			if ( empty( $auth_token ) ) {
+				WP_CLI::warning( 'Empty GitHub auth token, skipping plugin installation via artifacts URL.' );
+				return;
+			}
+
+			$ch = curl_init();
+			preg_match( '/artifacts\/([1-9]+)/', $url, $matches );
+			$url = sprintf( 'https://api.github.com/repos/woocommerce/woocommerce-blocks/actions/artifacts/%d/zip', $matches[1] );
+			curl_setopt( $ch, CURLOPT_URL, $url );
+			curl_setopt( $ch, CURLOPT_HTTPHEADER, array( "Authorization: token {$auth_token}", 'User-Agent: Woo-Test-Environment' ) );
+			curl_setopt( $ch, CURLOPT_HEADER, true );
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
+			$response = curl_exec( $ch );
+			$error = curl_error( $ch );
+
+			if ( '' !== $error ) {
+				die( $error ); // phpcs:ignore
+			}
+
+			preg_match( '/location:\s(.*)\n/im', $response, $matches );
+
+			$url = $matches[1];
+			curl_close( $ch );
 		}
 
 		try {
