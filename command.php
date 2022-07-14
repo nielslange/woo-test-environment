@@ -88,6 +88,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		$this->setupCoupons();
 		$this->setupReviews();
 		$this->setupPermalinks();
+		$this->updateWooCommerceDatabase();
 
 		WP_CLI::success( 'WooCommerce Blocks Testing Environment successfully set up.' );
 	}
@@ -317,6 +318,15 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	private function setupPermalinks() {
 		WP_CLI::runcommand( 'rewrite structure "/%postname%/"' );
 		WP_CLI::runcommand( 'rewrite flush' );
+	}
+
+	/**
+	 * Update WooCommerce database.
+	 *
+	 * @return void
+	 */
+	private function updateWooCommerceDatabase() {
+		WP_CLI::runcommand( 'wc update' );
 	}
 
 	/**
