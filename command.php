@@ -360,7 +360,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return bool
 	 */
 	private function isWoocommerceBlocksActive(): bool {
-		$result = WP_CLI::runcommand(
+		$result_old_slug = WP_CLI::runcommand(
 			'plugin is-active woo-gutenberg-products-block',
 			array(
 				'exit_error' => false,
@@ -368,7 +368,15 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			)
 		);
 
-		return 0 === $result->return_code;
+		$result_new_slug = WP_CLI::runcommand(
+			'plugin is-active woocommerce-gutenberg-products-block',
+			array(
+				'exit_error' => false,
+				'return'     => 'all',
+			)
+		);
+
+		return 0 === $result_old_slug->return_code || 0 === $result_new_slug->return_code;
 	}
 
 	/**
