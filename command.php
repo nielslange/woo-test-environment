@@ -116,8 +116,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		// Install and activate the Gutenberg plugin, if desired.
 		if ( isset( $assoc_args['gutenberg'] ) ) {
 			WP_CLI::runcommand( 'plugin install gutenberg --activate' );
-		}	
-		
+		}
+
 		// Install and activate the latest or a certain WooCommerce Blocks release.
 		$this->installWoocommerceBlocksPlugin( $assoc_args );
 	}
