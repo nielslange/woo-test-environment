@@ -109,16 +109,17 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPlugins( $assoc_args ) {
-		// Install and activate the latest or a certain WooCommerce Blocks release.
-		$this->installWoocommerceBlocksPlugin( $assoc_args );
+		// Install WooCommerce and import test products.
+		WP_CLI::runcommand( 'plugin install woocommerce --activate' );
+		WP_CLI::runcommand( 'plugin install wordpress-importer --activate' );
 
 		// Install and activate the Gutenberg plugin, if desired.
 		if ( isset( $assoc_args['gutenberg'] ) ) {
 			WP_CLI::runcommand( 'plugin install gutenberg --activate' );
-		}
-
-		WP_CLI::runcommand( 'plugin install woocommerce --activate' );
-		WP_CLI::runcommand( 'plugin install wordpress-importer --activate' );
+		}	
+		
+		// Install and activate the latest or a certain WooCommerce Blocks release.
+		$this->installWoocommerceBlocksPlugin( $assoc_args );
 	}
 
 	/**
