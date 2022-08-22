@@ -422,7 +422,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * @return false|int
 	 */
-	public function isReleaseVersion( $version ) {
+	private function isReleaseVersion( $version ) {
 		return preg_match( '/^\d.\d.\d$/', $version );
 	}
 
@@ -433,7 +433,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 *
 	 * @return bool
 	 */
-	public function isUrl( $url ): bool {
+	private function isUrl( $url ): bool {
 		return filter_var( $url, FILTER_VALIDATE_URL );
 	}
 
