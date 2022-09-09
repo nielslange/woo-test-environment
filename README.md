@@ -1,6 +1,6 @@
-# nielslange/woo-test-environment
+# WooCommerce Test Environment
 
-WP-CLI command to spin up a [WooCommerce Blocks](https://wordpress.org/plugins/woo-gutenberg-products-block/) testing environment.
+WP-CLI command to spin up a WooCommerce test environment in seconds.
 
 Quick links: [Installing](#installing) | [Usage](#usage) | [Contributing](#contributing)
 
