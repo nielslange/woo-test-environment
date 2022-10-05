@@ -93,6 +93,23 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	}
 
 	/**
+	 * Tear down WooCommerce Blocks Testing Environment.
+	 *
+	 * @return void
+	 */
+	public function teardown() {
+		WP_CLI::log( 'Tear down WooCommerce Blocks Testing Environment ...' );
+
+		$this->tearDownTax();
+		$this->tearDownShipping();
+		$this->tearDownPlugins();
+		$this->tearDownThemes();
+		$this->emptySite();
+
+		WP_CLI::success( 'WooCommerce Blocks Testing Environment successfully teared down.' );
+	}
+
+	/**
 	 * Empty site.
 	 *
 	 * @return void
@@ -123,6 +140,15 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	}
 
 	/**
+	 * Tear down plugins.
+	 *
+	 * @return void
+	 */
+	private function tearDownPlugins() {
+		WP_CLI::runcommand( 'plugin deactivate --all --uninstall' );
+	}
+
+	/**
 	 * Set up themes.
 	 *
 	 * @param array $assoc_args An array with optional arguments.
@@ -134,6 +160,16 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		if ( isset( $assoc_args['theme'] ) ) {
 			WP_CLI::runcommand( "theme install {$assoc_args['theme']} --activate" );
 		}
+	}
+
+	/**
+	 * Tear down themes.
+	 *
+	 * @return void
+	 */
+	private function tearDownThemes() {
+		WP_CLI::runcommand( 'theme activate twentytwentytwo' );
+		WP_CLI::runcommand( 'theme delete --all' );
 	}
 
 	/**
@@ -261,6 +297,23 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	}
 
 	/**
+	 * Tear down shopping.
+	 *
+	 * @return void
+	 */
+	private function tearDownShipping() {
+		$options = array(
+			'return' => true,
+			'parse'  => 'json',
+		);
+		$results = WP_CLI::runcommand( 'wc shipping_zone_method list 0 --field=instance_id --format=json --user=admin', $options );
+
+		foreach ( $results as $value ) {
+			WP_CLI::runcommand( 'wc shipping_zone_method delete 0 ' . $value . ' --zone_id=0 --instance_id=' . $value . ' --force=true --user=admin' );
+		}
+	}
+
+	/**
 	 * Set up payments.
 	 *
 	 * @param array $assoc_args An array with optional arguments.
@@ -290,6 +343,23 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	}
 
 	/**
+	 * Tear down tax.
+	 *
+	 * @return void
+	 */
+	private function tearDownTax() {
+		$options = array(
+			'return' => true,
+			'parse'  => 'json',
+		);
+		$results = WP_CLI::runcommand( 'wc tax list --format=json --field=id  --user=1', $options );
+
+		foreach ( $results as $value ) {
+			WP_CLI::runcommand( 'wc tax delete ' . $value . ' --force=true --user=1' );
+		}
+	}
+
+	/**
 	 * Set up coupons.
 	 *
 	 * @return void
@@ -316,40 +386,6 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	private function setupPermalinks() {
 		WP_CLI::runcommand( 'rewrite structure "/%postname%/"' );
 		WP_CLI::runcommand( 'rewrite flush' );
-	}
-
-	/**
-	 * Tear down WooCommerce Blocks Testing Environment.
-	 *
-	 * @return void
-	 */
-	public function teardown() {
-		WP_CLI::log( 'Tear down WooCommerce Blocks Testing Environment ...' );
-
-		$this->emptySite();
-		$this->tearDownPlugins();
-		$this->tearDownThemes();
-
-		WP_CLI::success( 'WooCommerce Blocks Testing Environment successfully teared down.' );
-	}
-
-	/**
-	 * Tear down plugins.
-	 *
-	 * @return void
-	 */
-	private function tearDownPlugins() {
-		WP_CLI::runcommand( 'plugin deactivate --all --uninstall' );
-	}
-
-	/**
-	 * Tear down themes.
-	 *
-	 * @return void
-	 */
-	private function tearDownThemes() {
-		WP_CLI::runcommand( 'theme activate twentytwentytwo' );
-		WP_CLI::runcommand( 'theme delete --all' );
 	}
 
 	/**
