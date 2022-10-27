@@ -179,6 +179,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 */
 	private function setupProducts() {
 		WP_CLI::runcommand( 'import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip' );
+		WP_CLI::runcommand( 'wc tool run regenerate_product_lookup_tables --user=1' );
 	}
 
 	/**
