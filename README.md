@@ -85,16 +85,3 @@ wp woo-test-environment setup --blocks --gutenberg --stripe --theme=storefront
 ## Contributing
 
 Contributions are always welcome! Feel free to create a new [issue](https://github.com/nielslange/woo-test-environment/issues) or [pull request](https://github.com/nielslange/woo-test-environment/pulls).
-
-## Changelog
-
-## 1.1.0 - July 6, 2022
-
-- [Command fails at sidebar](https://github.com/nielslange/woo-test-environment/issues/2) (props @albarin)
-- [Cart/Checkout inserted even if WooCommerce Blocks isn't installed](https://github.com/nielslange/woo-test-environment/issues/3) (props @albarin)
-- [Check PHPCS using GitHub Actions](https://github.com/nielslange/woo-test-environment/issues/7) (props @albarin)
-- [Install default/latest version of WooCommerce Blocks](https://github.com/nielslange/woo-test-environment/issues/1) (props @nielslange)
-
-### 1.0.0 - March 31, 2022
-
-- Initial commit
