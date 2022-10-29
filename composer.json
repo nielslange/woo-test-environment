@@ -1,6 +1,6 @@
 {
 	"name": "nielslange/woo-test-environment",
-	"description": "Set up a WooCommerce Blocks Testing Environment.",
+	"description": "A WP-CLI command for setting up a WooCommerce testing environment.",
 	"type": "wp-cli-package",
 	"homepage": "https://github.com/nielslange/woo-test-environment",
 	"license": "GPL-3.0-or-later",
