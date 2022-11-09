@@ -196,7 +196,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			$this->attribute_ids['pa_size']  = WP_CLI::runcommand( 'wc product_attribute create --name=Size --slug=pa_size --user=1 --porcelain', $options );
 		}
 
-		WP_CLI::runcommand( 'import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip --quiet' );
+		WP_CLI::runcommand( 'import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip' );
 		WP_CLI::runcommand( 'wc tool run regenerate_product_lookup_tables --user=1' );
 	}
 
