@@ -175,7 +175,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function tearDownThemes() {
-		WP_CLI::runcommand( 'theme activate twentytwentytwo' );
+		WP_CLI::runcommand( 'theme activate twentytwentythree' );
 		WP_CLI::runcommand( 'theme delete --all' );
 	}
 
