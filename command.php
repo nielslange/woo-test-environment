@@ -319,6 +319,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	private function setupShipping() {
 		WP_CLI::runcommand( 'wc shipping_zone_method create 0 --order=1 --enabled=true --settings=\'{"title":"Flat rate shipping", "cost": "10"}\' --method_id=flat_rate --user=1' );
 		WP_CLI::runcommand( 'wc shipping_zone_method create 0 --order=2 --enabled=true --settings=\'{"title":"Free shipping"}\' --method_id=free_shipping --user=1' );
+		WP_CLI::runcommand( 'option add woocommerce_pickup_location_settings \'{"enabled":"yes","title":"Local Pickup","tax_status":"taxable","cost":""}\' --format=json' );
+		WP_CLI::runcommand( 'option add pickup_location_pickup_locations \'[{"name":"Automattic Inc.","address":{"address_1":"60 29th Street Suite 343","city":"San Francisco","state":"CA","postcode":"94110","country":"US"},"details":"","enabled":true},{"name":"Aut O\u2019Mattic A8C Ireland Ltd","address":{"address_1":"25 Herbert Pl","city":"Dublin","state":"D","postcode":"D02 AY86","country":"IE"},"details":"","enabled":true}]\' --format=json' );
 	}
 
 	/**
@@ -332,10 +334,12 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			'parse'  => 'json',
 		);
 		$results = WP_CLI::runcommand( 'wc shipping_zone_method list 0 --field=instance_id --format=json --user=admin', $options );
-
 		foreach ( $results as $value ) {
 			WP_CLI::runcommand( 'wc shipping_zone_method delete 0 ' . $value . ' --zone_id=0 --instance_id=' . $value . ' --force=true --user=admin' );
 		}
+
+		WP_CLI::runcommand( 'option delete woocommerce_pickup_location_settings' );
+		WP_CLI::runcommand( 'option delete pickup_location_pickup_locations' );
 	}
 
 	/**
