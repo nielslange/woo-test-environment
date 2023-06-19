@@ -262,10 +262,10 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Best Selling Products\' --post_content=\'<!-- wp:woocommerce/product-best-sellers /-->\'' );
 
 		// Create Featured Category post.
-		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Featured Category\' --post_content=\'<!-- wp:woocommerce/featured-category {"editMode":false,"categoryId":20} --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button {"align":"center"} --><div class="wp-block-button aligncenter"><a class="wp-block-button__link" href="http://wpcli.local/product-category/clothing/">Shop now</a></div><!-- /wp:button --></div><!-- /wp:buttons --><!-- /wp:woocommerce/featured-category -->\'' );
+		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Featured Category\' --post_content=\'<!-- wp:woocommerce/featured-category {"editMode":false,"categoryId":20} --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button {"align":"center"} --><div class="wp-block-button aligncenter"><a class="wp-block-button__link" href="https://wpcli.local/product-category/clothing/">Shop now</a></div><!-- /wp:button --></div><!-- /wp:buttons --><!-- /wp:woocommerce/featured-category -->\'' );
 
 		// Create Featured Product post.
-		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Featured Product\' --post_content=\'<!-- wp:woocommerce/featured-product {"editMode":false,"productId":10} --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button {"align":"center"} --><div class="wp-block-button aligncenter"><a class="wp-block-button__link" href="http://wpcli.local/product/beanie/">Shop now</a></div><!-- /wp:button --></div><!-- /wp:buttons --><!-- /wp:woocommerce/featured-product -->\'' );
+		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Featured Product\' --post_content=\'<!-- wp:woocommerce/featured-product {"editMode":false,"productId":10} --><!-- wp:buttons --><div class="wp-block-buttons"><!-- wp:button {"align":"center"} --><div class="wp-block-button aligncenter"><a class="wp-block-button__link" href="https://wpcli.local/product/beanie/">Shop now</a></div><!-- /wp:button --></div><!-- /wp:buttons --><!-- /wp:woocommerce/featured-product -->\'' );
 
 		// Create Hand-picked Products post.
 		WP_CLI::runcommand( 'post create --post_status=publish --post_title=\'Hand-picked Products\' --post_content=\'<!-- wp:woocommerce/handpicked-products {"editMode":false,"products":[11,12,13]} /-->\'' );
