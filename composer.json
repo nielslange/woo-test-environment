@@ -30,10 +30,10 @@
 	},
 	"scripts": {
 		"phpcs": [
-			"@php ./vendor/bin/phpcs -p -s -n . --extensions=php --ignore=\"/vendor/*\""
+			"@php ./vendor/bin/phpcs --standard=phpcs.xml -p -s -n . --extensions=php --ignore=\"/vendor/*\""
 		],
 		"phpcbf": [
-			"@php ./vendor/bin/phpcbf -p -s -n . --extensions=php --ignore=\"/vendor/*\""
+			"@php ./vendor/bin/phpcbf --standard=phpcs.xml -p -s -n . --extensions=php --ignore=\"/vendor/*\""
 		],
 		"lint": [
 			"@php ./vendor/php-parallel-lint/php-parallel-lint/parallel-lint . -e php --exclude vendor --exclude .git"
