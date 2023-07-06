@@ -1,7 +1,3 @@
-### ⚠️ We've recently discovered that when using this WP-CLI command and using the WooCommerce Blocks extension, that the corresponding blocks are not working. We need to look into this issue to find out what's causing this problem. In the meantime, please handel this WP-CLI command with care.
-
----
-
 # WooCommerce Test Environment
 
 WP-CLI command to spin up a WooCommerce test environment in seconds.
