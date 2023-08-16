@@ -460,6 +460,15 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			return;
 		}
 
+		// Define the plugin directory path
+		$plugin_dir = WP_PLUGIN_DIR . '/woo-gutenberg-products-block';
+
+		// Check if the plugin directory exists
+		if ( file_exists( $plugin_dir ) ) {
+			// If the plugin directory exists, delete it
+			$this->deleteDirectory( $plugin_dir );
+		}
+
 		if ( true === $assoc_args['blocks'] ) {
 			WP_CLI::runcommand( 'plugin install woo-gutenberg-products-block --activate' );
 			return;
@@ -483,6 +492,36 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			WP_CLI::error( $th );
 		}
 	}
+
+	/**
+	 * Deletes a directory recursively.
+	 *
+	 * @param string $dir The directory to delete.
+	 *
+	 * @return bool
+	 */
+	private function deleteDirectory( $dir ) {
+		if ( ! file_exists( $dir ) ) {
+			return true;
+		}
+
+		if ( ! is_dir( $dir ) ) {
+			return unlink( $dir );
+		}
+
+		foreach ( scandir( $dir ) as $item ) {
+			if ( $item == '.' || $item == '..' ) {
+				continue;
+			}
+
+			if ( ! $this->deleteDirectory( $dir . DIRECTORY_SEPARATOR . $item ) ) {
+				return false;
+			}
+		}
+
+		return rmdir( $dir );
+	}
+
 
 	/**
 	 * Checks if the given string is a release version.
