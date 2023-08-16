@@ -460,12 +460,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			return;
 		}
 
-		// Define the plugin directory path
 		$plugin_dir = WP_PLUGIN_DIR . '/woo-gutenberg-products-block';
-
-		// Check if the plugin directory exists
 		if ( file_exists( $plugin_dir ) ) {
-			// If the plugin directory exists, delete it
 			$this->deleteDirectory( $plugin_dir );
 		}
 
@@ -510,7 +506,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		}
 
 		foreach ( scandir( $dir ) as $item ) {
-			if ( $item == '.' || $item == '..' ) {
+			if ( '.' === $item || '..' === $item ) {
 				continue;
 			}
 
