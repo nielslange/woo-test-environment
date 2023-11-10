@@ -2,6 +2,12 @@
 <ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="PHP_CodeSniffer" xsi:noNamespaceSchemaLocation="phpcs.xsd">
 	<description>The coding standard for managing a WooCommerce Blocks Testing Environment.</description>
 
+	<config name="testVersion" value="8.0-"/>
+
+	<file>.</file>
+
+	<exclude-pattern>vendor/</exclude-pattern>
+
 	<rule ref="WooCommerce-Core" />
 
 	<rule ref="WordPress">
