@@ -510,25 +510,26 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return bool
 	 */
 	private function deleteDirectory( $dir ) {
-		if ( ! file_exists( $dir ) ) {
+		require_once ABSPATH . 'wp-admin/includes/file.php';
+
+		WP_Filesystem();
+		global $wp_filesystem;
+
+		if ( ! $wp_filesystem->exists( $dir ) ) {
 			return true;
 		}
 
-		if ( ! is_dir( $dir ) ) {
-			return unlink( $dir );
+		if ( ! $wp_filesystem->is_dir( $dir ) ) {
+			return $wp_filesystem->delete( $dir );
 		}
 
-		foreach ( scandir( $dir ) as $item ) {
-			if ( '.' === $item || '..' === $item ) {
-				continue;
-			}
-
+		foreach ( $wp_filesystem->dirlist( $dir ) as $item => $details ) {
 			if ( ! $this->deleteDirectory( $dir . DIRECTORY_SEPARATOR . $item ) ) {
 				return false;
 			}
 		}
 
-		return rmdir( $dir );
+		return $wp_filesystem->rmdir( $dir );
 	}
 
 
