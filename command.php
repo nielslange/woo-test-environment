@@ -133,7 +133,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPlugins( $assoc_args ) {
-		if ( ! isWcBetaTesterPluginActive() ) {
+		if ( ! $this->isWcBetaTesterPluginActive() ) {
 			WP_CLI::runcommand( 'plugin install woocommerce --activate' );
 		}
 
