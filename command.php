@@ -133,16 +133,16 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupPlugins( $assoc_args ) {
-		// Install WooCommerce and import test products.
-		WP_CLI::runcommand( 'plugin install woocommerce --activate' );
+		if ( ! isWcBetaTesterPluginActive() ) {
+			WP_CLI::runcommand( 'plugin install woocommerce --activate' );
+		}
+
 		WP_CLI::runcommand( 'plugin install wordpress-importer --activate' );
 
-		// Install and activate the Gutenberg plugin, if desired.
 		if ( isset( $assoc_args['gutenberg'] ) ) {
 			WP_CLI::runcommand( 'plugin install gutenberg --activate' );
 		}
 
-		// Install and activate the latest or a certain WooCommerce Blocks release.
 		$this->installWoocommerceBlocksPlugin( $assoc_args );
 	}
 
@@ -459,6 +459,23 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 		);
 
 		return 0 === $result_old_slug->return_code || 0 === $result_new_slug->return_code;
+	}
+
+	/**
+	 * Checks whether the WooCommerce Beta Tester plugin is enabled or not.
+	 *
+	 * @return bool
+	 */
+	private function isWcBetaTesterPluginActive(): bool {
+		$active_plugins = get_option( 'active_plugins' );
+
+		foreach ( $active_plugins as $plugin ) {
+			if ( 0 === strpos( $plugin, 'wc_beta_tester_live_branch_' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
