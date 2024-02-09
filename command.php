@@ -189,15 +189,15 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			'return' => true,
 			'parse'  => 'json',
 		);
-		$results = WP_CLI::runcommand( 'wc product_attribute list --format=json --user=1', $options );
+		$results = WP_CLI::runcommand( '--user=1 wc product_attribute list --format=json', $options );
 
 		if ( empty( $results ) ) {
-			$this->attribute_ids['pa_color'] = WP_CLI::runcommand( 'wc product_attribute create --name=Color --slug=pa_color --user=1 --porcelain', $options );
-			$this->attribute_ids['pa_size']  = WP_CLI::runcommand( 'wc product_attribute create --name=Size --slug=pa_size --user=1 --porcelain', $options );
+			$this->attribute_ids['pa_color'] = WP_CLI::runcommand( '--user=1 wc product_attribute create --name=Color --slug=pa_color --porcelain', $options );
+			$this->attribute_ids['pa_size']  = WP_CLI::runcommand( '--user=1 wc product_attribute create --name=Size --slug=pa_size --porcelain', $options );
 		}
 
 		WP_CLI::runcommand( 'import wp-content/plugins/woocommerce/sample-data/sample_products.xml --authors=skip' );
-		WP_CLI::runcommand( 'wc tool run regenerate_product_lookup_tables --user=1' );
+		WP_CLI::runcommand( '--user=1 wc tool run regenerate_product_lookup_tables' );
 	}
 
 	/**
@@ -330,8 +330,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupShipping() {
-		WP_CLI::runcommand( 'wc shipping_zone_method create 0 --order=1 --enabled=true --settings=\'{"title":"Flat rate shipping", "cost": "10"}\' --method_id=flat_rate --user=1' );
-		WP_CLI::runcommand( 'wc shipping_zone_method create 0 --order=2 --enabled=true --settings=\'{"title":"Free shipping"}\' --method_id=free_shipping --user=1' );
+		WP_CLI::runcommand( '--user=1 wc shipping_zone_method create 0 --order=1 --enabled=true --settings=\'{"title":"Flat rate shipping", "cost": "10"}\' --method_id=flat_rate' );
+		WP_CLI::runcommand( '--user=1 wc shipping_zone_method create 0 --order=2 --enabled=true --settings=\'{"title":"Free shipping"}\' --method_id=free_shipping' );
 
 		if ( false === get_option( 'woocommerce_pickup_location_settings' ) ) {
 			WP_CLI::runcommand( 'option add woocommerce_pickup_location_settings \'{"enabled":"yes","title":"Local Pickup","tax_status":"taxable","cost":""}\' --format=json' );
@@ -352,9 +352,9 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			'return' => true,
 			'parse'  => 'json',
 		);
-		$results = WP_CLI::runcommand( 'wc shipping_zone_method list 0 --field=instance_id --format=json --user=admin', $options );
+		$results = WP_CLI::runcommand( '--user=1 wc shipping_zone_method list 0 --field=instance_id --format=json', $options );
 		foreach ( $results as $value ) {
-			WP_CLI::runcommand( 'wc shipping_zone_method delete 0 ' . $value . ' --zone_id=0 --instance_id=' . $value . ' --force=true --user=admin' );
+			WP_CLI::runcommand( '--user=1 wc shipping_zone_method delete 0 ' . $value . ' --zone_id=0 --instance_id=' . $value . ' --force=true' );
 		}
 
 		WP_CLI::runcommand( 'option delete woocommerce_pickup_location_settings' );
@@ -385,9 +385,9 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 */
 	private function setupTax() {
 		WP_CLI::runcommand( 'option set woocommerce_calc_taxes yes' );
-		WP_CLI::runcommand( 'wc tax create --rate=10 --class=standard --user=1' );
-		WP_CLI::runcommand( 'wc tax create --rate=5 --class=reduced-rate --user=1' );
-		WP_CLI::runcommand( 'wc tax create --rate=0 --class=zero-rate --user=1' );
+		WP_CLI::runcommand( '--user=1 wc tax create --rate=10 --class=standard' );
+		WP_CLI::runcommand( '--user=1 wc tax create --rate=5 --class=reduced-rate' );
+		WP_CLI::runcommand( '--user=1 wc tax create --rate=0 --class=zero-rate' );
 	}
 
 	/**
@@ -400,10 +400,10 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 			'return' => true,
 			'parse'  => 'json',
 		);
-		$results = WP_CLI::runcommand( 'wc tax list --format=json --field=id  --user=1', $options );
+		$results = WP_CLI::runcommand( '--user=1 wc tax list --format=json --field=id', $options );
 
 		foreach ( $results as $value ) {
-			WP_CLI::runcommand( 'wc tax delete ' . $value . ' --force=true --user=1' );
+			WP_CLI::runcommand( '--user=1 wc tax delete ' . $value . ' --force=true' );
 		}
 	}
 
@@ -413,7 +413,7 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	 * @return void
 	 */
 	private function setupCoupons() {
-		WP_CLI::runcommand( 'wc shop_coupon create --code=coupon --amount=10 --discount_type=percent --user=1' );
+		WP_CLI::runcommand( '--user=1 wc shop_coupon create --code=coupon --amount=10 --discount_type=percent' );
 	}
 
 	/**
