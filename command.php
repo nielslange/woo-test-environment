@@ -386,6 +386,8 @@ class WooCommerce_Blocks_Testing_Environment extends WP_CLI_Command {
 	private function setupTax() {
 		WP_CLI::runcommand( 'option set woocommerce_calc_taxes yes' );
 		WP_CLI::runcommand( '--user=1 wc tax create --rate=10 --class=standard' );
+		WP_CLI::runcommand( '--user=1 wc tax create --rate=5 --class=reduced-rate' );
+		WP_CLI::runcommand( '--user=1 wc tax create --rate=0 --class=zero-rate' );
 	}
 
 	/**
